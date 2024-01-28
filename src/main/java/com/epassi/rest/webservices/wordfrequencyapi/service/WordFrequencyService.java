@@ -54,7 +54,8 @@ public class WordFrequencyService {
 	        // Retrieve the top K frequent words from the max heap
 	        List<String> result = new java.util.ArrayList<>();
 	        while (topK-- > 0 && !maxHeap.isEmpty()) {
-	            result.add(maxHeap.poll().getKey());
+	        	Map.Entry<String, Integer> entry = maxHeap.poll();
+	            result.add(entry.getKey() + ": " + entry.getValue().toString());
 	        }
 
 	        return result;
