@@ -1,5 +1,7 @@
 package com.epassi.rest.webservices.wordfrequencyapi.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,19 +30,15 @@ public class WordFrequencyService {
      * @throws IOException If an I/O error occurs while reading the file
      */
 	public List<String> findTopKFrequentWords(String filePath, int topK) throws IOException {
-			// Read the entire file into a String
-			String text = new String(Files.readAllBytes(Paths.get(filePath)));
-	        
-			// Split the text into words using whitespace as a delimiter
-			String[] words = text.split("\\s+");
 
 			// Map to store word frequencies
 	        Map<String, Integer> wordFrequencyMap = new HashMap<>();
-
-	        for (String word : words) {
-	        	// Clean the word by converting to lowercase and removing non-alphabetic characters
-	            String cleanedWord = word.toLowerCase().replaceAll("[^a-zA-Z]", ""); 
-	            wordFrequencyMap.put(cleanedWord, wordFrequencyMap.getOrDefault(cleanedWord, 0) + 1);
+	        
+	        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+	            String line;
+	            while ((line = reader.readLine()) != null) {
+	                processLine(line, wordFrequencyMap);
+	            }
 	        }
 
 	        // Max heap to efficiently find the top K frequent words
@@ -62,5 +60,13 @@ public class WordFrequencyService {
 	        return result;
         
 	}
+	
+	private void processLine(String line, Map<String, Integer> wordFrequencyMap) {
+        String[] words = line.split("\\s+");
+        for (String word : words) {
+            String cleanedWord = word.toLowerCase().replaceAll("[^a-zA-Z]", "");
+            wordFrequencyMap.put(cleanedWord, wordFrequencyMap.getOrDefault(cleanedWord, 0) + 1);
+        }
+    }
 	
 }
