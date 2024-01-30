@@ -18,9 +18,6 @@ import com.epassi.rest.webservices.wordfrequencyapi.service.WordFrequencyService
 
 @SpringBootTest
 public class WordFrequencyServiceTest {
-
-//	 @Mock
-//	 private BufferedReader reader;
 	
 	private final WordFrequencyService wordFrequencyService = new WordFrequencyService();
 

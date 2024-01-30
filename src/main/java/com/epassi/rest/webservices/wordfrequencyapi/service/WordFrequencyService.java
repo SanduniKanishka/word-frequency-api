@@ -3,23 +3,40 @@ package com.epassi.rest.webservices.wordfrequencyapi.service;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
 public class WordFrequencyService {
+	
+	private final Map<String, List<String>> cache = new HashMap<>();
+
+	/**
+	 * Check whether the filepath and topk is saved in cache
+	 * @param filePath
+	 * @param topK
+	 * @return List of top K frequent words
+	 * @throws IOException
+	 */
+    public List<String> findTopKFrequentWords(String filePath, int topK) throws IOException {
+        // Check if the result is already cached
+        String cacheKey = filePath + "-" + topK;
+        if (cache.containsKey(cacheKey)) {
+            System.out.println("Using cached result for " + cacheKey);
+            return cache.get(cacheKey);
+        }
+
+        // Read the file and calculate the top K frequent words
+        List<String> result = calculateTopKFrequentWords(filePath, topK);
+
+        // Cache the result
+        cache.put(cacheKey, result);
+
+        return result;
+    }
 
 	/**
      * Finds the top K most frequent words in a text file.
@@ -29,7 +46,7 @@ public class WordFrequencyService {
      * @return List of top K frequent words
      * @throws IOException If an I/O error occurs while reading the file
      */
-	public List<String> findTopKFrequentWords(String filePath, int topK) throws IOException {
+	public List<String> calculateTopKFrequentWords(String filePath, int topK) throws IOException {
 
 			// Map to store word frequencies
 	        Map<String, Integer> wordFrequencyMap = new HashMap<>();
