@@ -42,6 +42,7 @@ Click "Send" to make the request.
 ### Algorithm
 
 calculateTopKFrequentWords() method:
+
 In this method, first, a hashmap named wordFrequencyMap is initialized to store the frequencies of words.
 BufferedReader is used to read line by line and for each line, it calls the processLine() method to extract and process words. Here, to handle very large files, the file is processed line by line instead of reading the entire content into memory at once. 
 A PriorityQueue (maxHeap) is created using a custom comparator to compare entries based on word frequencies.
@@ -50,6 +51,7 @@ Then all the entries are added from the wordFrequencyMap to the maxHeap. We can 
 Finally, It retrieves the top K frequent words from the maxHeap, adding them to the result list (result), and returns the list of top K frequent words.
 
 processLine() method:
+
 This helper function processes a line of text, extracts words, cleans them, and updates the word frequency map. The cleaning process ensures that only alphabetic characters are considered, and case-insensitivity is maintained. The cleaned words are used as keys in the wordFrequencyMap, and their counts are updated accordingly.
 
 ### Caching
@@ -57,13 +59,18 @@ To avoid re-calculating the top K most frequent words every time the API is call
 
 ### Authentication and Authorization
 For authentication, the username and password are hardcoded in the SecurityConfig file. In here 2 roles are created as 'USER' and 'ADMIN'. But only the 'USER' level is authorized for the 'TopFrequentWords' method. The username and password for 'USER' is as follows.
+
 username: user
+
 password: password
 
 ### Testing
 Multiple test cases are written to cover the scenarios. Here, to create temporary files Files.createTempFile() method is used. These files are created in  the default temporary-file directory and this  default temporary-file directory can be varied in the operating system. As an example,
+
 for Windows:  %USER%\AppData\Local\Temp
+
 for Ubuntu: /tmp
+
 If any error occurs when creating a temporary file, please change Files.createTempFile() like below in createTempTestFile(String content) Method
 Path tempFilePath = Files.createTempFile(Paths. get("E://"), "testFile", ".txt");
 Please specify a specific path instead of "E://".
