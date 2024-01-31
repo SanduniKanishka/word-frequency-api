@@ -28,7 +28,7 @@ public class WordFrequencyServiceTest {
 	 }
 	 
 	@Test
-    public void testFindTopKFrequentWords() throws IOException {
+    public void findTopKFrequentWords_ValidInput_TopKWords() throws IOException {
         // Create a temporary test file with sample text
         String filePath = createTempTestFile("Software engineering is an engineering-based approach to software "
         		+ "development. A software engineer is a person who applies the engineering "
@@ -44,7 +44,7 @@ public class WordFrequencyServiceTest {
     }
 	 
 	@Test
-    public void testFindTopKFrequentWordsEmptyFile() throws IOException {
+    public void findTopKFrequentWords_EmptyFile_EmptyList() throws IOException {
         // Create a temporary empty test file
         String filePath = createTempTestFile("");
 
@@ -56,13 +56,13 @@ public class WordFrequencyServiceTest {
     }
 	
 	@Test
-    public void testFindTopKFrequentWordsFileNotFound() {
+    public void findTopKFrequentWords_FileNotFound_ThrowIOException() {
         // Test with a non-existing file
         assertThrows(IOException.class, () -> wordFrequencyService.findTopKFrequentWords("nonexistent.txt", 3));
     }
 	
 	@Test
-    public void testFindTopKFrequentWordsWithDuplicates() throws IOException {
+    public void findTopKFrequentWords_FileContainsDuplicates_SingleWord() throws IOException {
         // Create a temporary test file with duplicate words
         String filePath = createTempTestFile("word word word word");
 
@@ -74,7 +74,7 @@ public class WordFrequencyServiceTest {
     }
 
 	@Test
-    public void testFindTopKFrequentWordsWithSameFrequency() throws IOException {
+    public void findTopKFrequentWords_SameFrequency_WordsInAlphabeticOrder() throws IOException {
         // Create a temporary test file with words having the same frequency
         String filePath = createTempTestFile("software Engineering is software Engineering");
 
@@ -86,11 +86,11 @@ public class WordFrequencyServiceTest {
     }
 	
 	@Test
-    public void testFindTopKFrequentWordsWithLessUniqueWordsThanK() throws IOException {
+    public void findTopKFrequentWords_LessWordsThanK_AllUniqueWords() throws IOException {
         // Create a temporary test file with fewer unique words than K
         String filePath = createTempTestFile("Software engineering is an engineering");
 
-        // Test with K=3 for the top 3 frequent words
+        // Test with K=6 for the top 6 frequent words
         List<String> topWords = wordFrequencyService.findTopKFrequentWords(filePath, 6);
 
         // Check if the result is as expected (contains all unique words)
@@ -99,7 +99,7 @@ public class WordFrequencyServiceTest {
     }
 	
 	@Test
-    public void testFindTopKFrequentWordsWithNonAlphabeticCharacters() throws IOException {
+    public void findTopKFrequentWords_NonAlphabeticCharacters_IgnoreNonAlphabets() throws IOException {
         // Create a temporary test file with non-alphabetic characters
         String filePath = createTempTestFile("Software! engineering! ! is an engineering");
 
@@ -112,13 +112,9 @@ public class WordFrequencyServiceTest {
     }
 	
 	@Test
-    public void testFindTopKFrequentWordsWithLargeFile() throws IOException {
+    public void findTopKFrequentWords_LargeFile_TopKFrequentWords() throws IOException {
         // Create a temporary test file with a large number of words
-        StringBuilder content = new StringBuilder();
-        for (int i = 0; i < 10000; i++) {
-            content.append("word ");
-        }
-        String filePath = createTempTestFile(content.toString().trim());
+        String filePath = createTempTestFile(getContent().toString().trim());
 
         // Test with K=1 for the top frequent word
         List<String> topWords = wordFrequencyService.findTopKFrequentWords(filePath, 1);
@@ -126,6 +122,14 @@ public class WordFrequencyServiceTest {
         // Check if the result is as expected (contains only "word")
         assertEquals(List.of("word"), topWords);
     }
+	
+	private StringBuilder getContent() {
+		StringBuilder content = new StringBuilder();
+        for (int i = 0; i < 10000; i++) {
+            content.append("word ");
+        }
+        return content;
+	}
 	private String createTempTestFile(String content) throws IOException {
         Path tempFilePath = Files.createTempFile("testFile", ".txt");
         Files.write(tempFilePath, content.getBytes());

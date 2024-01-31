@@ -60,7 +60,6 @@ public class WordFrequencyService {
 
 	        // Max heap to efficiently find the top K frequent words
 	        PriorityQueue<Map.Entry<String, Integer>> maxHeap = new PriorityQueue<>(
-//	                (entry1, entry2) -> Integer.compare(entry2.getValue(), entry1.getValue())
 	        		(entry1, entry2) -> {
 	                    int frequencyComparison = Integer.compare(entry2.getValue(), entry1.getValue());
 	                    return (frequencyComparison != 0) ? frequencyComparison : entry1.getKey().compareTo(entry2.getKey());
@@ -76,7 +75,6 @@ public class WordFrequencyService {
 	        List<String> result = new java.util.ArrayList<>();
 	        while (topK-- > 0 && !maxHeap.isEmpty()) {
 	        	Map.Entry<String, Integer> entry = maxHeap.poll();
-//	            result.add(entry.getKey() + ": " + entry.getValue().toString());
 	        	result.add(entry.getKey());
 	        }
 
@@ -87,8 +85,14 @@ public class WordFrequencyService {
 	private void processLine(String line, Map<String, Integer> wordFrequencyMap) {
         String[] words = line.split("\\s+");
         for (String word : words) {
-            String cleanedWord = word.toLowerCase().replaceAll("[^a-zA-Z]", "").replaceAll(" ", "");
-            wordFrequencyMap.put(cleanedWord, wordFrequencyMap.getOrDefault(cleanedWord, 0) + 1);
+        	//String cleanedWord = word.toLowerCase().replaceAll("[^a-zA-Z\\s]", "");
+        	// Remove non-alphabetic characters from the word
+            String cleanedWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase();
+            
+            // Skip empty strings after cleaning
+            if (!cleanedWord.isEmpty()) {
+                wordFrequencyMap.put(cleanedWord, wordFrequencyMap.getOrDefault(cleanedWord, 0) + 1);
+            }
         }
     }
 	
