@@ -4,16 +4,10 @@
 
 The Word Frequency API is a Spring Boot application that analyzes a given text file to find the top K most frequent words. It uses Java 16 and provides an endpoint to retrieve the results.
 
-
 ## Installation and Setup
 
-1. Clone the repository:
-
-   git clone https://github.com/yourusername/word-frequency-api.git
-   cd word-frequency-api
-   
-2. Build the project
-	./mvnw clean install
+Clone the repository:
+https://github.com/SanduniKanishka/word-frequency-api
 
 The application will start at http://localhost:8080
 
