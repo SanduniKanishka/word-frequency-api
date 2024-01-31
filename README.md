@@ -12,8 +12,8 @@ https://github.com/SanduniKanishka/word-frequency-api
 The application will start at http://localhost:8080
 
 ## API Endpoint
-Retrieve Top K Frequent Words
-Endpoint: /api/v1/TopFrequentWords
+Retrieve Top K Frequent Words  
+Endpoint: /api/v1/TopFrequentWords  
 Method: GET
 Parameters:
 filePath (String): Path to the text file.
